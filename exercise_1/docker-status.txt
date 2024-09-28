@@ -1,0 +1,11 @@
+nix@vivienleigh:~/git/compse140$ docker ps
+CONTAINER ID   IMAGE                                    COMMAND                  CREATED          STATUS                PORTS                                                                                            NAMES
+de88efa1e66d   compse140_service1                       "ruby service1.rb"       23 minutes ago   Up 3 seconds          0.0.0.0:8199->8199/tcp, :::8199->8199/tcp                                                        compse140_service1_1
+414f6d7f93bf   compse140_service2                       "python service2.py"     23 minutes ago   Up 3 seconds          8200/tcp                                                                                         compse140_service2_1
+
+
+nix@vivienleigh:~/git/compse140$ docker network ls
+NETWORK ID     NAME                      DRIVER    SCOPE
+6c93642e0825   bridge                    bridge    local
+d0873820473f   compse140_app-network     bridge    local
+01cb82c19a0e   host                      host      local
