@@ -4,6 +4,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile_service1
+    image: service1:latest
     ports:
       - "8199:8199"
     depends_on:
@@ -15,6 +16,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile_service2
+    image: service2:latest
     expose:
     - "8200"
     networks:
