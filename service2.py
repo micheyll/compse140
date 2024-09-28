@@ -1,29 +1,21 @@
-import socket
-import subprocess
+import http.server
 import json
-from http.server import HTTPServer, BaseHTTPRequestHandler
+import subprocess
+import socket
 
 def get_ip_address():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        s.connect(('10.255.255.255', 1))
-        IP = s.getsockname()[0]
-    except Exception:
-        IP = '127.0.0.1'
-    finally:
-        s.close()
-    return IP
+    return socket.gethostbyname(socket.gethostname())
 
 def get_processes():
-    return subprocess.check_output(['ps', '-ax']).decode('utf-8')
+    return subprocess.check_output(['ps', '-e', '-o', 'comm=', '--sort=-%cpu', '|', 'head', '-n', '5'], shell=True).decode().strip().split('\n')
 
 def get_disk_space():
-    return subprocess.check_output(['df', '-h', '/']).decode('utf-8').split('\n')[1]
+    return subprocess.check_output(['df', '-h', '/', '--output=avail']).decode().split('\n')[1].strip()
 
 def get_uptime():
-    return subprocess.check_output(['uptime', '-p']).decode('utf-8').strip()
+    return subprocess.check_output(['uptime', '-p']).decode().strip()
 
-class Service2Handler(BaseHTTPRequestHandler):
+class MyHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
             self.send_response(200)
@@ -31,20 +23,20 @@ class Service2Handler(BaseHTTPRequestHandler):
             self.end_headers()
             
             info = {
-                'service2': {
-                    'ip': get_ip_address(),
-                    'processes': get_processes(),
-                    'disk_space': get_disk_space(),
-                    'uptime': get_uptime()
+                "Service2": {
+                    "IP address information": get_ip_address(),
+                    "List of running processes": get_processes(),
+                    "Available disk space": get_disk_space(),
+                    "Time since last boot": get_uptime()
                 }
             }
             
-            self.wfile.write(json.dumps(info).encode())
+            self.wfile.write(json.dumps(info, indent=2).encode())
         else:
             self.send_error(404)
 
 if __name__ == '__main__':
     server_address = ('', 8200)
-    httpd = HTTPServer(server_address, Service2Handler)
+    httpd = http.server.HTTPServer(server_address, MyHandler)
     print('Service2 listening on port 8200...')
     httpd.serve_forever()
