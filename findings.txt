@@ -1,0 +1,16 @@
+Fndings on what containers share with the host:
+
+- Containers share the same kernel as the host.
+  This is a key difference from virtual machines, which run their own kernel.
+  Can potentially lead to security vulnerabilities.
+
+- Containers share the same network as the host.
+  Often true, although containers can be isolated from the host network. For example, on these containers we created
+  a separate network for the containers to communicate with each other.
+
+- Containers can mount volumes from the host, allowing for data persistence and sharing between host and container.
+  Often required if the contaiers are not stateless.
+
+- Containers can access the host's resources, such as CPU, memory, and storage.
+  Tools like 'ps' in a container can potentially see host processes, depending on the configuration.
+  Can be limited through cgroups, but not fully isolated like in VMs.
