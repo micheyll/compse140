@@ -13,30 +13,45 @@ class ShutdownHandler(BaseHTTPRequestHandler):
             try:
                 client = docker.from_env()
                 
-                # List of containers to stop first
-                containers_to_stop = [
-                    'exercise_4_service1_1_1',
-                    'exercise_4_service1_2_1',
-                    'exercise_4_service1_3_1',
-                    'exercise_4_service2_1',
-                    'exercise_4_nginx_1'
+                # Base names for the containers
+                base_names = [
+                    'service1_1',
+                    'service1_2',
+                    'service1_3',
+                    'service2',
+                    'nginx'
                 ]
                 
-                # Stop all listed containers
-                for name in containers_to_stop:
+                # Try both naming conventions for each container
+                for base in base_names:
+                    hyphen_name = f'exercise_4-{base}-1'
+                    underscore_name = f'exercise_4_{base}_1'
+                    
                     try:
-                        container = client.containers.get(name)
-                        print(f"Stopping {name}")
-                        container.kill()
-                    except Exception as e:
-                        print(f"Error stopping {name}: {e}")
+                        container = client.containers.get(hyphen_name)
+                        print(f"Stopping {hyphen_name}")
+                        container.stop()
+                    except:
+                        try:
+                            container = client.containers.get(underscore_name)
+                            print(f"Stopping {underscore_name}")
+                            container.stop()
+                        except:
+                            print(f"Could not find container with either {hyphen_name} or {underscore_name}")
                 
                 # Wait 20 seconds
-                time.sleep(5)
+                time.sleep(20)
                 
-                # Stop ourselves
-                container = client.containers.get('exercise_4_shutdown-handler_1')
-                container.kill()
+                # Try to stop ourselves with either naming convention
+                try:
+                    container = client.containers.get('exercise_4-shutdown-handler-1')
+                    container.stop()
+                except:
+                    try:
+                        container = client.containers.get('exercise_4_shutdown-handler_1')
+                        container.stop()
+                    except Exception as e:
+                        print(f"Error stopping shutdown handler: {e}")
                     
             except Exception as e:
                 print(f"Error during shutdown: {e}")
