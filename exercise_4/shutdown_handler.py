@@ -13,7 +13,7 @@ class ShutdownHandler(BaseHTTPRequestHandler):
             try:
                 client = docker.from_env()
                 
-                # Base names for the containers
+                # Names for the containers (this is terrible practice)
                 base_names = [
                     'service1_1',
                     'service1_2',
@@ -22,7 +22,8 @@ class ShutdownHandler(BaseHTTPRequestHandler):
                     'nginx'
                 ]
                 
-                # Try both naming conventions for each container
+                # Forced to add two separate naming schemes since different versions of docker seem to
+                # name containers differently.
                 for base in base_names:
                     hyphen_name = f'exercise_4-{base}-1'
                     underscore_name = f'exercise_4_{base}_1'
@@ -39,10 +40,10 @@ class ShutdownHandler(BaseHTTPRequestHandler):
                         except:
                             print(f"Could not find container with either {hyphen_name} or {underscore_name}")
                 
-                # Wait 20 seconds
-                time.sleep(20)
+                time.sleep(10)
                 
-                # Try to stop ourselves with either naming convention
+                # Forced to add two separate naming schemes since different versions of docker seem to
+                # name containers differently.
                 try:
                     container = client.containers.get('exercise_4-shutdown-handler-1')
                     container.stop()
