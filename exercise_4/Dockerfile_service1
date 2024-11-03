@@ -1,0 +1,4 @@
+FROM ruby:3.0
+WORKDIR /app
+COPY service1.rb .
+CMD ["ruby", "service1.rb"]

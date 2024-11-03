@@ -1,0 +1,14 @@
+nix@vivienleigh:~/git/compse140/exercise_4$ docker ps
+CONTAINER ID   IMAGE                                    COMMAND                  CREATED         STATUS                 PORTS                                                                                            NAMES
+0a2ca2161471   nginx:alpine                             "/docker-entrypoint.…"   3 minutes ago   Up 8 seconds           80/tcp, 0.0.0.0:8198->8198/tcp, :::8198->8198/tcp                                                exercise_4_nginx_1
+838855977ffd   exercise_4_service1_3                    "ruby service1.rb"       3 minutes ago   Up 8 seconds           8199/tcp                                                                                         exercise_4_service1_3_1
+284af336a489   exercise_4_service1_2                    "ruby service1.rb"       3 minutes ago   Up 8 seconds           8199/tcp                                                                                         exercise_4_service1_2_1
+3e59610b319e   exercise_4_service1_1                    "ruby service1.rb"       3 minutes ago   Up 8 seconds           8199/tcp                                                                                         exercise_4_service1_1_1
+f9860a831e6a   exercise_4_service2                      "python service2.py"     6 minutes ago   Up 9 seconds           8200/tcp                                                                                         exercise_4_service2_1
+2c59d438c0ec   exercise_4_shutdown-handler              "python shutdown_han…"   6 minutes ago   Up 9 seconds           8201/tcp                                                                                         exercise_4_shutdown-handler_1
+
+nix@vivienleigh:~/git/compse140/exercise_4$ docker network ls
+NETWORK ID     NAME                      DRIVER    SCOPE
+06b94112e8f4   bridge                    bridge    local
+6ccab06f74b3   exercise_4_app-network    bridge    local
+01cb82c19a0e   host                      host      local
