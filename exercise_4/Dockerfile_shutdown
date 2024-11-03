@@ -1,5 +1,0 @@
-FROM python:3.9-slim
-RUN pip install docker
-WORKDIR /app
-COPY shutdown_handler.py .
-CMD ["python", "shutdown_handler.py"]
